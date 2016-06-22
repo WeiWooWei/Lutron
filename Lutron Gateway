@@ -46,7 +46,7 @@ def selectLutron() {						// This block builds the setup screen
 			for (int i = 0; i < howMany; i++) {	//Iterating through number of devices specified by user
 				def thisCmd = "dCmd$i"		//dCmd == Device Command.  This creates the box for the commmand
 				def thisName = "dName$i"	//dName == Device Name.  Creating box for device name.
-				getCmd(thisCmd, i + 1)		//Function call to insert your text into the box.
+				getCmd(thisCmd, i + 1)		//Function call to insert your command text into the box.
 				getName(thisName, i + 1)	//Function call to insert your name into the box
                 		paragraph(" ")
 			}
@@ -65,9 +65,13 @@ def updated() {
 
 def initialize() {
 	state.myDevices = [:]						//Defining devices map
+	log.debug "Made it inside the initialize function"		//Test to see if we made it here
 	for (int i = 0 ; i < howMany; i++) {				//Iterating through number of devices specified by user
+	log.debug "Run through the for loop = $i"			//Showing which run through the loop we're on
         def thisCmd = settings.find {it.key == "dCmd$i"}		// -Not sure here-
+        log.debug "Value of thisCmd at this point - $thisCmd"		//Printing value of thisCmd
         def thisName = settings.find {it.key == "dName$i"}		// -Not sure here-
+        log.debug "Value of thisName at this point - $thisName"		//Printing value of thisName
     	def deviceId = "Lutron" + "$i-" + app.id			//Setting name of device
         def myDevice = getChildDevice(deviceId)
         if(!myDevice) def childDevice = addChildDevice("smartthings", thisCmd.value[1] in ['d', 'D'] ? "Virtual Dimmer" : "On/Off Button Tile", deviceId, null, [label: thisName.value])
